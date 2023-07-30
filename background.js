@@ -18,8 +18,14 @@ loadConfig().then((data) => {
 
 // Function to check if a URL is a valid webpage
 const isValidWebpage = (url) => {
-  // Check if the URL starts with "http" or "ftp" to ensure it's a webpage
-  return url.startsWith('http') || url.startsWith('ftp');
+  // Check if the URL starts with "http" or "https" to ensure it's a valid webpage
+  return /^https?:\/\//i.test(url);
+};
+
+// Function to check if a URL is allowed to trigger the badge
+const isAllowedURL = (url) => {
+  // Check if the URL starts with "http" or "https" and exclude other schemes like "file://", "about:", etc.
+  return /^(https?|ftp):\/\//i.test(url);
 };
 
 // Function to update the badge text based on the current tab
@@ -29,14 +35,21 @@ const updateBadgeText = (tabId) => {
 
     // Check if the tab is a valid webpage
     if (isValidWebpage(tab.url)) {
-      const browserData = Object.values(config.browsers).find((browser) => {
-        return browser.websites.some((site) => tab.url.includes(site));
-      });
+      // Check if the URL is allowed to trigger the badge
+      if (isAllowedURL(tab.url)) {
+        const browserData = Object.values(config.browsers).find((browser) => {
+          return browser.websites.some((site) => tab.url.includes(site));
+        });
 
-      if (browserData) {
-        browser.browserAction.setBadgeText({ text: browserData.badgeText });
-        browser.browserAction.setTitle({ title: browserData.name });
+        if (browserData) {
+          browser.browserAction.setBadgeText({ text: browserData.badgeText });
+          browser.browserAction.setTitle({ title: browserData.name });
+        } else {
+          browser.browserAction.setBadgeText({ text: '' });
+          browser.browserAction.setTitle({ title: 'Browser Mask' });
+        }
       } else {
+        // If it's not an allowed URL, hide the badge text
         browser.browserAction.setBadgeText({ text: '' });
         browser.browserAction.setTitle({ title: 'Browser Mask' });
       }
