@@ -10,7 +10,7 @@
       "name": "Google Chrome",
       "badgeText": "C",
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
-      "websites": ["google.com", "twitter.com", "facebook.com", "youtube.com", "geforcenow.com", "snapchat.com"]
+      "websites": ["google.com", "twitter.com", "facebook.com", "youtube.com", "geforcenow.com", "snapchat.com", "nvidia.com"]
     },
     "edge": {
       "name": "Microsoft Edge",
